@@ -1,0 +1,298 @@
+Create database practica3;
+
+use practica3;
+
+DROP TABLE IF EXISTS `administrador`;
+CREATE TABLE IF NOT EXISTS `administrador` (
+  `id_Administrador` char(10) NOT NULL,
+  `Nombre` char(45) NOT NULL,
+  `Apellido` char(45) NOT NULL,
+  `Telefono` char(10) NOT NULL,
+  `cita` char(10) NOT NULL,
+  `N_paciente` char(10) NOT NULL,
+  PRIMARY KEY (`id_Administrador`),
+  KEY `N_paciente` (`N_paciente`),
+  KEY `cita` (`cita`)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cita`
+--
+
+DROP TABLE IF EXISTS `cita`;
+CREATE TABLE IF NOT EXISTS `cita` (
+  `id_cita` char(10) NOT NULL,
+  `Fecha` date DEFAULT NULL,
+  `Hora` datetime DEFAULT NULL,
+  `Medico_Cabecera` char(10) NOT NULL,
+  `paciente` char(10) NOT NULL,
+  PRIMARY KEY (`id_cita`),
+  KEY `Medico_Cabecera` (`Medico_Cabecera`),
+  KEY `gg` (`paciente`)
+) ENGINE=InnoDB;
+
+--
+-- Volcado de datos para la tabla `cita`
+--
+
+INSERT INTO `cita` (`id_cita`, `Fecha`, `Hora`, `Medico_Cabecera`, `paciente`) VALUES
+('1', '2021-03-02', '2021-03-04 05:19:00', '1322', '13133522'),
+('2', '2021-03-06', '2021-03-06 05:19:00', '1322', '13133522');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `examenes`
+--
+
+DROP TABLE IF EXISTS `examenes`;
+CREATE TABLE IF NOT EXISTS `examenes` (
+  `id_paciente` char(10) NOT NULL,
+  `Tipo_Examen` char(45) NOT NULL,
+  `Persona_no_M` char(10) NOT NULL,
+  PRIMARY KEY (`id_paciente`),
+  KEY `Persona_no_M` (`Persona_no_M`)
+) ENGINE=InnoDB;
+
+--
+-- Volcado de datos para la tabla `examenes`
+--
+
+INSERT INTO `examenes` (`id_paciente`, `Tipo_Examen`, `Persona_no_M`) VALUES
+('13133522', 'cardio', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `historial_clinico`
+--
+
+DROP TABLE IF EXISTS `historial_clinico`;
+CREATE TABLE IF NOT EXISTS `historial_clinico` (
+  `id_paciente` char(10) NOT NULL,
+  `especialista_atendido` char(10) NOT NULL,
+  PRIMARY KEY (`id_paciente`),
+  KEY `especialista_atendido` (`especialista_atendido`)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `medico_cabecera`
+--
+
+DROP TABLE IF EXISTS `medico_cabecera`;
+CREATE TABLE IF NOT EXISTS `medico_cabecera` (
+  `Numero_Licencia` char(10) NOT NULL,
+  `Nombre` char(45) NOT NULL,
+  `Apellido` char(45) NOT NULL,
+  `Telefono` char(10) NOT NULL,
+  `tratamiento` char(10) NOT NULL,
+  PRIMARY KEY (`Numero_Licencia`),
+  KEY `tratamiento` (`tratamiento`)
+) ENGINE=InnoDB;
+
+--
+-- Volcado de datos para la tabla `medico_cabecera`
+--
+
+INSERT INTO `medico_cabecera` (`Numero_Licencia`, `Nombre`, `Apellido`, `Telefono`, `tratamiento`) VALUES
+('1322', 'juan', 'dener', '09223232', '13133522');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `medico_especialista`
+--
+
+DROP TABLE IF EXISTS `medico_especialista`;
+CREATE TABLE IF NOT EXISTS `medico_especialista` (
+  `Id_Especialista` char(10) NOT NULL,
+  `Nombres` char(45) NOT NULL,
+  `Apellidos` char(45) NOT NULL,
+  `Tipo_Especialidad` char(45) NOT NULL,
+  `examenes` char(10) NOT NULL,
+  PRIMARY KEY (`Id_Especialista`),
+  KEY `examenes` (`examenes`)
+) ENGINE=InnoDB;
+
+--
+-- Volcado de datos para la tabla `medico_especialista`
+--
+
+INSERT INTO `medico_especialista` (`Id_Especialista`, `Nombres`, `Apellidos`, `Tipo_Especialidad`, `examenes`) VALUES
+('1', 'Enma', 'Demera', 'cirujano', '13133522');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `paciente`
+--
+
+DROP TABLE IF EXISTS `paciente`;
+CREATE TABLE IF NOT EXISTS `paciente` (
+  `Cedula` char(10) NOT NULL,
+  `Nombres` char(45) NOT NULL,
+  `Apellidos` char(45) NOT NULL,
+  `telefono` char(10) NOT NULL,
+  `user` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `tipo` varchar(45) NOT NULL,
+  PRIMARY KEY (`Cedula`)
+) ENGINE=InnoDB;
+
+--
+-- Volcado de datos para la tabla `paciente`
+--
+
+INSERT INTO `paciente` (`Cedula`, `Nombres`, `Apellidos`, `telefono`, `user`, `password`, `tipo`) VALUES
+('13133522', 'Gabriel', 'Demera', '0997093100', '22', '1', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `personas_no_medicas`
+--
+
+DROP TABLE IF EXISTS `personas_no_medicas`;
+CREATE TABLE IF NOT EXISTS `personas_no_medicas` (
+  `Id_registro_Personal` char(10) NOT NULL,
+  `Nombres` char(45) NOT NULL,
+  `Apellidos` char(45) NOT NULL,
+  `Cargo` char(45) NOT NULL,
+  `Telefono` char(10) NOT NULL,
+  PRIMARY KEY (`Id_registro_Personal`)
+) ENGINE=InnoDB;
+
+--
+-- Volcado de datos para la tabla `personas_no_medicas`
+--
+
+INSERT INTO `personas_no_medicas` (`Id_registro_Personal`, `Nombres`, `Apellidos`, `Cargo`, `Telefono`) VALUES
+('1', 'wilson', 'Demera', 'Auxiliar', '09223232');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `receta_medica`
+--
+
+DROP TABLE IF EXISTS `receta_medica`;
+CREATE TABLE IF NOT EXISTS `receta_medica` (
+  `id_paciente` char(10) NOT NULL,
+  `detalle_receta_medica` char(45) NOT NULL,
+  `especialista_atendido` char(10) NOT NULL,
+  PRIMARY KEY (`id_paciente`),
+  KEY `especialista_atendido` (`especialista_atendido`)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tratamiento`
+--
+
+DROP TABLE IF EXISTS `tratamiento`;
+CREATE TABLE IF NOT EXISTS `tratamiento` (
+  `id_paciente` char(10) NOT NULL,
+  `detalle_tratamiento` char(45) NOT NULL,
+  `especialista_atendido` char(10) NOT NULL,
+  PRIMARY KEY (`id_paciente`),
+  KEY `especialista_atendido` (`especialista_atendido`)
+) ENGINE=InnoDB;
+
+--
+-- Volcado de datos para la tabla `tratamiento`
+--
+
+INSERT INTO `tratamiento` (`id_paciente`, `detalle_tratamiento`, `especialista_atendido`) VALUES
+('13133522', 'cirujia', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `cedula` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `tipo` varchar(45) NOT NULL,
+  `nombres` varchar(45) NOT NULL,
+  `apellido` varchar(45) NOT NULL,
+  PRIMARY KEY (`cedula`)
+) ENGINE=InnoDB AUTO_INCREMENT=1313356783 ;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO `user` (`cedula`, `usuario`, `password`, `tipo`, `nombres`, `apellido`) VALUES
+(1, '22', '1', '2', '5', '5'),
+(141232, '1', '1', 'null', '544', '444'),
+(222222, '1', '1', 'null', '544', '444'),
+(9999999, 'genesis', 'genesis', '1', 'genesis', 'cedeño');
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `administrador`
+--
+ALTER TABLE `administrador`
+  ADD CONSTRAINT `administrador_ibfk_1` FOREIGN KEY (`N_paciente`) REFERENCES `paciente` (`Cedula`),
+  ADD CONSTRAINT `administrador_ibfk_2` FOREIGN KEY (`cita`) REFERENCES `cita` (`id_cita`);
+
+--
+-- Filtros para la tabla `cita`
+--
+ALTER TABLE `cita`
+  ADD CONSTRAINT `cita_ibfk_1` FOREIGN KEY (`Medico_Cabecera`) REFERENCES `medico_cabecera` (`Numero_Licencia`),
+  ADD CONSTRAINT `gg` FOREIGN KEY (`paciente`) REFERENCES `paciente` (`Cedula`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Filtros para la tabla `examenes`
+--
+ALTER TABLE `examenes`
+  ADD CONSTRAINT `examenes_ibfk_1` FOREIGN KEY (`Persona_no_M`) REFERENCES `personas_no_medicas` (`Id_registro_Personal`);
+
+--
+-- Filtros para la tabla `historial_clinico`
+--
+ALTER TABLE `historial_clinico`
+  ADD CONSTRAINT `historial_clinico_ibfk_1` FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`Cedula`),
+  ADD CONSTRAINT `historial_clinico_ibfk_2` FOREIGN KEY (`especialista_atendido`) REFERENCES `medico_especialista` (`Id_Especialista`);
+
+--
+-- Filtros para la tabla `medico_cabecera`
+--
+ALTER TABLE `medico_cabecera`
+  ADD CONSTRAINT `medico_cabecera_ibfk_1` FOREIGN KEY (`tratamiento`) REFERENCES `tratamiento` (`id_paciente`);
+
+--
+-- Filtros para la tabla `medico_especialista`
+--
+ALTER TABLE `medico_especialista`
+  ADD CONSTRAINT `medico_especialista_ibfk_1` FOREIGN KEY (`examenes`) REFERENCES `examenes` (`id_paciente`);
+
+--
+-- Filtros para la tabla `receta_medica`
+--
+ALTER TABLE `receta_medica`
+  ADD CONSTRAINT `receta_medica_ibfk_1` FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`Cedula`),
+  ADD CONSTRAINT `receta_medica_ibfk_2` FOREIGN KEY (`especialista_atendido`) REFERENCES `medico_especialista` (`Id_Especialista`);
+
+--
+-- Filtros para la tabla `tratamiento`
+--
+ALTER TABLE `tratamiento`
+  ADD CONSTRAINT `tratamiento_ibfk_1` FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`Cedula`),
+  ADD CONSTRAINT `tratamiento_ibfk_2` FOREIGN KEY (`especialista_atendido`) REFERENCES `medico_especialista` (`Id_Especialista`);
+COMMIT;
+
+
